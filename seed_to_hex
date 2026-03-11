@@ -1,0 +1,36 @@
+import argparse
+import hashlib
+import os
+from tqdm import tqdm   # <-- добавлен импорт
+
+PATH = os.path.abspath(os.path.dirname(__file__))
+SEED_NAME = 'seed.txt'
+HEX_NAME = 'hex.txt'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-u', action='store_true')
+parser.add_argument('-c', action='store_true')
+args = parser.parse_args()
+
+def read() -> list:
+    path = os.path.join(PATH, SEED_NAME)
+    with open(path, 'r', encoding='utf-8') as file:
+        return [row.replace('\n', '').rstrip() for row in file.readlines()]
+
+def write(path, rows):
+    with open(path, 'w', encoding='utf-8') as file:
+        file.writelines([row + '\n' for row in rows])
+
+def write_hash(rows):
+    hash_rows = []
+    # Используем tqdm для отображения прогресса
+    for row in tqdm(rows, desc="Hashing", unit="line"):
+        hash_rows.append(hashlib.sha256(row.encode('utf-8')).hexdigest())
+    write(os.path.join(PATH, HEX_NAME), hash_rows)
+
+def main():
+    rows = read()
+    write_hash(rows)
+
+if __name__ == "__main__":
+    main()
