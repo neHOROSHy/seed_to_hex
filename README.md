@@ -1,5 +1,5 @@
 """
-Script: main2.py
+Script: seed_to_hex.py
 Description:
     This script reads lines from 'seed.txt', computes the SHA256 hash for each line,
     and writes the hexadecimal hashes to 'hex.txt'. The input and output files are
